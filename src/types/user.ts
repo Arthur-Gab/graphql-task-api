@@ -56,7 +56,9 @@ builder.queryField('user', (t) =>
 					}
 				);
 
-			return selectedUser[0];
+			const { password, ...userWithoutPasswordField } = selectedUser[0];
+
+			return userWithoutPasswordField;
 		},
 	})
 );
@@ -110,12 +112,10 @@ builder.mutationField('createUser', (t) =>
 					.values(newUser)
 					.returning();
 
-				const { password, ...unsensitivyFields } =
+				const { password, ...userWithoutPasswordField } =
 					sucessfullyCreatedUser[0];
 
-				console.log(unsensitivyFields);
-
-				return unsensitivyFields;
+				return userWithoutPasswordField;
 			} catch (e) {
 				if (e instanceof Postgres.PostgresError) {
 					console.error(
@@ -192,13 +192,16 @@ builder.mutationField('updateUsername', (t) =>
 					.update(users)
 					.set({ username: input.username })
 					.where(eq(users.id, input.userId))
-					.returning();
+					.returning({
+						username: users.username,
+						avatarUrl: users.avatarUrl,
+					});
 
 				if (!updatedUser[0]) {
 					throw new Error('O ID informado nao esta registrado no BD');
 				}
 
-				console.log(updatedUser);
+				return updatedUser[0];
 			} catch (e) {
 				if (e instanceof Postgres.PostgresError) {
 					if (e.code === '23505') {
@@ -236,8 +239,8 @@ export const User = builder.objectType('User', {
 			description: 'Email do usuário',
 		}),
 		password: t.exposeString('password', {
-			description: 'Senha do usuário',
 			nullable: true,
+			description: 'Senha do usuário',
 		}),
 		avatarUrl: t.exposeString('avatarUrl', {
 			nullable: true,

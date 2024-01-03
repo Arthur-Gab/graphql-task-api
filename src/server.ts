@@ -28,7 +28,7 @@ const startApolloServer = async () => {
 				const user = verifyUser(token);
 
 				return {
-					isLogged: !!user,
+					isLoggedIn: !!user,
 					db,
 					users,
 					todos,

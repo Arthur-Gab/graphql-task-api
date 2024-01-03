@@ -8,5 +8,6 @@ export const users = pgTable('users', {
 	avatarUrl: text('avatar_url'),
 });
 
+// Subescrever o tipo de password
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;

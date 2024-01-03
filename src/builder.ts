@@ -22,15 +22,17 @@ export const builder = new SchemaBuilder<{
 	};
 	Context: MyContext;
 	AuthScopes: {
-		isUserLogged: boolean;
+		isUserLoggedIn: boolean;
 		public: boolean;
 	};
 }>({
 	plugins: [ScopeAuthPlugin, WithInputPlugin],
 	authScopes: async (context) => {
+		console.log(context.isLoggedIn);
+
 		return {
 			public: true,
-			isUserLogged: context.isLogged,
+			isUserLoggedIn: context.isLoggedIn,
 		};
 	},
 });
