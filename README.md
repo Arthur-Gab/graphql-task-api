@@ -18,6 +18,8 @@ Work on Progress...
 
 <a  href="#funcionalidades">Funcionalidades</a> •
 
+<a  href='#docs'>Documentação da API</a>•
+
 <a  href="#pre-requisitos">Pré-Requisitos</a> •
 
 <a  href="#rodando-back-end">Rodando a API</a> •
@@ -48,6 +50,12 @@ Work on Progress...
 
 -   [ ] Adicionar Imagem de Perfil ao Usuário
 
+<h2  id='docs'>Documentação da API</h2>
+
+Consulte a documentação da API GraphQL para obter detalhes sobre os tipos, consultas e mutações suportadas.
+
+[Visualizar Documentação](./schema.graphql)
+
 <h2  id='pre-requisitos'>Pré-requisitos</h2>
 
 Antes de começar, certifique-se de ter instalado em sua máquina as seguintes ferramentas:
@@ -60,31 +68,71 @@ Além disso, é bom ter um editor para trabalhar com o código como [VSCode](htt
 
 ```bash
 
+
+
+
+
 # Clone este repositório
+
+
+
+
 
 $  git  clone  <https://github.com/seu-usuario/seu-repo>
 
 
 
+
+
+
+
 # Acesse a pasta do projeto no terminal/cmd
+
+
+
+
 
 $  cd  seu-repo
 
 
 
+
+
+
+
 # Instale as dependências
+
+
+
+
 
 $  bun  install
 
 
 
+
+
+
+
 # Execute a aplicação em modo de desenvolvimento
+
+
+
+
 
 $  bun  dev
 
 
 
+
+
+
+
 # O servidor iniciará em <http://localhost:4000/graphql>
+
+
+
+
 
 ```
 
