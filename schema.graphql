@@ -1,6 +1,10 @@
+"""Objeto que representa o resultado de uma autenticação bem-sucedida."""
 type AuthPayload {
+  """Token contendo o ID do usuário."""
   token: String!
-  user: User
+
+  """Usuário relacionado ao token."""
+  user: User!
 }
 
 """Data em formato ISO 8601 sem Time Zone"""
@@ -26,6 +30,9 @@ type Mutation {
   Remove um usuário do sistema. É necessário fornecer um ID de usuário válido.
   """
   deleteUser(input: MutationDeleteUserInput!): Boolean!
+
+  """Mutação para autenticar e fazer login de um usuário."""
+  sigIn(input: MutationSigInInput!): AuthPayload!
 
   """
   Alterar o título, a descrição e o estado (completada ou não) de uma tarefa no sistema. É necessário fornecer um ID de tarefa válido.
@@ -71,6 +78,14 @@ input MutationDeleteTodoInput {
 input MutationDeleteUserInput {
   """ID único do usuário"""
   userId: ID!
+}
+
+input MutationSigInInput {
+  """Email de login do usuário"""
+  email: String!
+
+  """Senha do usuário"""
+  password: String!
 }
 
 input MutationUpdateTodoInput {

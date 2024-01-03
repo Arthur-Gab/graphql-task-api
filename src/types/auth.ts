@@ -25,7 +25,6 @@ builder.mutationField('sigIn', (t) =>
 			public: true,
 		},
 		type: 'AuthPayload',
-		nullable: true,
 		resolve: async (_, { input }, { db, users }): Promise<AuthPayload> => {
 			// Validar o email
 			const isInputEmailValid = isEmailValidy(input.email);
@@ -81,10 +80,15 @@ builder.mutationField('sigIn', (t) =>
 );
 
 builder.objectType('AuthPayload', {
+	description:
+		'Objeto que representa o resultado de uma autenticação bem-sucedida.',
 	fields: (t) => ({
-		token: t.exposeString('token'),
+		token: t.exposeString('token', {
+			description: 'Token contendo o ID do usuário.',
+		}),
 		user: t.field({
 			type: 'User',
+			description: 'Usuário relacionado ao token.',
 			resolve: async (parent): Promise<any> => parent.user,
 		}),
 	}),
