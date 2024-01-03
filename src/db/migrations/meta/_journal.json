@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1704150537164,
-      "tag": "0000_panoramic_colossus",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1704311259657,
-      "tag": "0001_long_komodo",
+      "when": 1704317482526,
+      "tag": "0000_funny_captain_america",
       "breakpoints": true
     }
   ]

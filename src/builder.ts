@@ -8,26 +8,31 @@ import { type Todo } from './db/todos/schema';
 import { type MyContext } from './types/context';
 
 import ScopeAuthPlugin from '@pothos/plugin-scope-auth';
-// import { type AuthPayload } from './types/auth';
+import { type AuthPayload } from './types/auth';
 
 export const builder = new SchemaBuilder<{
 	Objects: {
 		User: User;
 		Todo: Todo;
+		AuthPayload: AuthPayload;
 	};
 	Scalars: {
 		ID: { Input: string; Output: string };
 		Date: { Input: Date; Output: Date };
 	};
 	Context: MyContext;
-	AuthScope: {
-		isUserLoggin: boolean;
+	AuthScopes: {
+		isUserLogged: boolean;
+		public: boolean;
 	};
 }>({
 	plugins: [ScopeAuthPlugin, WithInputPlugin],
-	authScopes: async (context) => ({
-		isUserLoggin: !!context.currentUser,
-	}),
+	authScopes: async (context) => {
+		return {
+			public: true,
+			isUserLogged: context.isLogged,
+		};
+	},
 });
 
 builder.addScalarType('Date', DateTimeISOResolver, {

@@ -175,13 +175,7 @@ builder.mutationField('deleteTodo', (t) =>
 	})
 );
 
-/**
- * Query de Todos
- * 1 - Pegar o usuario pela authentication
- * 2 - Retornar todas as todos do usuario
- */
-
-export const Todo = builder.objectType('Todo', {
+builder.objectType('Todo', {
 	description: 'Representa uma tarefa a ser realizada',
 	fields: (t) => ({
 		id: t.exposeID('id', { description: `Identificador único da tarefa` }),

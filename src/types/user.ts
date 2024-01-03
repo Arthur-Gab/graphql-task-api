@@ -1,14 +1,23 @@
 import { builder } from '../builder';
-import Postgres from 'postgres';
+import { createId, isEmailValidy } from '../lib';
 import { GraphQLError } from 'graphql';
-import { type NewUser } from '../db/user/schema';
-import { createId } from '../lib';
+import Postgres from 'postgres';
+import bcrypt from 'bcrypt';
+
 import { eq } from 'drizzle-orm';
 
-// Just For Developmnet Environmet and Helper - Will be deleted on production
+import { type NewUser } from '../db/user/schema';
+/**
+ *
+ * DELETE BEFORE PRODUCTION
+ *
+ */
 builder.queryField('users', (t) =>
 	t.field({
 		description: `Lista de Usuários Registrados no Banco de Dados`,
+		authScopes: {
+			public: true,
+		},
 		type: ['User'],
 		nullable: {
 			list: false,
@@ -20,7 +29,7 @@ builder.queryField('users', (t) =>
 	})
 );
 
-// Just For Developmnet Environmet and Helper - Will be deleted on production
+// Unique Query of Schema
 builder.queryField('user', (t) =>
 	t.fieldWithInput({
 		description: `Obter usuário por ID no banco de dados`,
@@ -31,13 +40,7 @@ builder.queryField('user', (t) =>
 			}),
 		},
 		type: 'User',
-		resolve: async (
-			_,
-			{ input },
-			{ db, users, currentUser }
-		): Promise<any> => {
-			console.log(currentUser);
-
+		resolve: async (_, { input }, { db, users }): Promise<any> => {
 			const selectedUser = await db
 				.select()
 				.from(users)
@@ -58,28 +61,16 @@ builder.queryField('user', (t) =>
 	})
 );
 
-/**
- * Etapas para criar um Usuario
- * - Receber os dados que o usuario vai digitar:
- * 1 - login
- * 2 - senha
- * 3 - username
- *
- * - Inser no banco de dados os seguintes dados
- * 1 - id, gerado automaticamente com o cuid2
- * 2 - login recebido pelo usuario
- * 3 - password, recebido pelo usuario mas sera encriptada para ser salvo no DB
- * 4 - username, recebido pelo usuario
- * 5 - avatar_url -> Funcao que sera criada posteriormente, neste momento sera gravado uma URL `padrao`
- */
-
 builder.mutationField('createUser', (t) =>
 	t.fieldWithInput({
 		description: `Cria um novo usuário no sistema. É necessário fornecer informações como login, senha e nome de usuário (username), o qual deve ser único.`,
+		authScopes: {
+			public: true,
+		},
 		input: {
-			login: t.input.string({
+			email: t.input.string({
 				required: true,
-				description: 'Nome de login do novo usuário',
+				description: 'Email de login do novo usuário',
 			}),
 			password: t.input.string({
 				required: true,
@@ -92,12 +83,25 @@ builder.mutationField('createUser', (t) =>
 		},
 		type: 'User',
 		resolve: async (_, { input }, { db, users }): Promise<any> => {
+			const isInputEmailValid = isEmailValidy(input.email);
+
+			if (!isInputEmailValid.sucess) {
+				throw new GraphQLError(
+					isInputEmailValid.error?.message as string,
+					{
+						extensions: {
+							code: isInputEmailValid.error?.code as string,
+						},
+					}
+				);
+			}
+
 			try {
 				const newUser: NewUser = {
 					id: createId(),
 					username: input.username,
-					login: input.login,
-					password: await Bun.password.hash(input.password),
+					email: input.email,
+					password: await bcrypt.hashSync(input.password, 10),
 					avatarUrl: 'Default URL',
 				};
 
@@ -106,7 +110,12 @@ builder.mutationField('createUser', (t) =>
 					.values(newUser)
 					.returning();
 
-				return sucessfullyCreatedUser[0];
+				const { password, ...unsensitivyFields } =
+					sucessfullyCreatedUser[0];
+
+				console.log(unsensitivyFields);
+
+				return unsensitivyFields;
 			} catch (e) {
 				if (e instanceof Postgres.PostgresError) {
 					console.error(
@@ -115,7 +124,7 @@ builder.mutationField('createUser', (t) =>
 
 					if (e.code === '23505')
 						throw new GraphQLError(
-							'O nome de usuário fornecido já está em uso. Por favor, escolha outro.',
+							'O email fornecido já está em uso. Por favor, escolha outro.',
 							{
 								extensions: {
 									code: 'BAD_USER_INPUT',
@@ -223,11 +232,12 @@ export const User = builder.objectType('User', {
 		username: t.exposeString('username', {
 			description: 'Nome de usuário do usuário',
 		}),
-		login: t.exposeString('login', {
-			description: 'Nome de login do usuário',
+		email: t.exposeString('email', {
+			description: 'Email do usuário',
 		}),
 		password: t.exposeString('password', {
 			description: 'Senha do usuário',
+			nullable: true,
 		}),
 		avatarUrl: t.exposeString('avatarUrl', {
 			nullable: true,

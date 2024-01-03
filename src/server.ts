@@ -10,8 +10,6 @@ import { type MyContext } from './types/context';
 
 import { verifyUser } from './lib';
 
-import { GraphQLError } from 'graphql';
-
 const startApolloServer = async () => {
 	try {
 		const server = new ApolloServer<MyContext>({
@@ -27,9 +25,10 @@ const startApolloServer = async () => {
 			},
 			context: async ({ req, res }) => {
 				const token = req.headers.authorization || '';
+				const user = verifyUser(token);
 
 				return {
-					currentUser: verifyUser(token),
+					isLogged: !!user,
 					db,
 					users,
 					todos,

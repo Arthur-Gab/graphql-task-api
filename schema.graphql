@@ -1,3 +1,8 @@
+type AuthPayload {
+  token: String!
+  user: User
+}
+
 """Data em formato ISO 8601 sem Time Zone"""
 scalar Date
 
@@ -8,11 +13,6 @@ type Mutation {
   createTodo(input: MutationCreateTodoInput!): Todo!
 
   """
-  Cria um novo usuário no sistema. É necessário fornecer informações como login, senha e nome de usuário (username), o qual deve ser único.
-  """
-  createUser(input: MutationCreateUserInput!): User!
-
-  """
   Remove uma tarefa do sistema. É necessário fornecer um ID de tarefa válido.
   """
   deleteTodo(input: MutationDeleteTodoInput!): Boolean!
@@ -21,6 +21,11 @@ type Mutation {
   Remove um usuário do sistema. É necessário fornecer um ID de usuário válido.
   """
   deleteUser(input: MutationDeleteUserInput!): Boolean!
+
+  """
+  Cria um novo usuário no sistema. É necessário fornecer informações como login, senha e nome de usuário (username), o qual deve ser único.
+  """
+  signUp(input: MutationSignUpInput!): AuthPayload
 
   """
   Alterar o título, a descrição e o estado (completada ou não) de uma tarefa no sistema. É necessário fornecer um ID de tarefa válido.
@@ -47,17 +52,6 @@ input MutationCreateTodoInput {
   userId: ID!
 }
 
-input MutationCreateUserInput {
-  """Nome de login do novo usuário"""
-  login: String!
-
-  """Senha do novo usuário"""
-  password: String!
-
-  """Nome de usuário único para o novo usuário"""
-  username: String!
-}
-
 input MutationDeleteTodoInput {
   """ID da tarefa a ser deletada."""
   todoId: ID!
@@ -66,6 +60,17 @@ input MutationDeleteTodoInput {
 input MutationDeleteUserInput {
   """ID único do usuário"""
   userId: ID!
+}
+
+input MutationSignUpInput {
+  """Nome de login do novo usuário"""
+  login: String!
+
+  """Senha do novo usuário"""
+  password: String!
+
+  """Nome de usuário único para o novo usuário"""
+  username: String!
 }
 
 input MutationUpdateTodoInput {

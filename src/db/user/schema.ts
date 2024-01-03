@@ -2,9 +2,9 @@ import { pgTable, varchar, text } from 'drizzle-orm/pg-core';
 
 export const users = pgTable('users', {
 	id: varchar('user_id', { length: 25 }).primaryKey(),
-	username: varchar('username', { length: 50 }).unique().notNull(),
-	login: varchar('login', { length: 50 }).notNull(),
+	email: text('email').notNull().unique(), // login -> email
 	password: text('password').notNull(),
+	username: varchar('username', { length: 50 }).notNull(),
 	avatarUrl: text('avatar_url'),
 });
 
