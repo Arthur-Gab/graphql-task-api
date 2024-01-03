@@ -31,7 +31,13 @@ builder.queryField('user', (t) =>
 			}),
 		},
 		type: 'User',
-		resolve: async (_, { input }, { db, users }): Promise<any> => {
+		resolve: async (
+			_,
+			{ input },
+			{ db, users, currentUser }
+		): Promise<any> => {
+			console.log(currentUser);
+
 			const selectedUser = await db
 				.select()
 				.from(users)
@@ -210,7 +216,7 @@ builder.mutationField('updateUsername', (t) =>
 	})
 );
 
-builder.objectType('User', {
+export const User = builder.objectType('User', {
 	description: 'Representa um usuário no sistema',
 	fields: (t) => ({
 		id: t.exposeID('id', { description: 'Identificador único do usuário' }),

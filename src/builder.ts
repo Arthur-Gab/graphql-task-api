@@ -5,7 +5,10 @@ import WithInputPlugin from '@pothos/plugin-with-input';
 import { type User } from './db/user/schema';
 import { type Todo } from './db/todos/schema';
 
-import { type MyContext } from './context';
+import { type MyContext } from './types/context';
+
+import ScopeAuthPlugin from '@pothos/plugin-scope-auth';
+// import { type AuthPayload } from './types/auth';
 
 export const builder = new SchemaBuilder<{
 	Objects: {
@@ -17,8 +20,14 @@ export const builder = new SchemaBuilder<{
 		Date: { Input: Date; Output: Date };
 	};
 	Context: MyContext;
+	AuthScope: {
+		isUserLoggin: boolean;
+	};
 }>({
-	plugins: [WithInputPlugin],
+	plugins: [ScopeAuthPlugin, WithInputPlugin],
+	authScopes: async (context) => ({
+		isUserLoggin: !!context.currentUser,
+	}),
 });
 
 builder.addScalarType('Date', DateTimeISOResolver, {

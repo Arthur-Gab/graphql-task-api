@@ -6,7 +6,11 @@ import { db } from './db';
 import { users } from './db/user/schema';
 import { todos } from './db/todos/schema';
 
-import { type MyContext } from './context';
+import { type MyContext } from './types/context';
+
+import { verifyUser } from './lib';
+
+import { GraphQLError } from 'graphql';
 
 const startApolloServer = async () => {
 	try {
@@ -22,7 +26,10 @@ const startApolloServer = async () => {
 				port: PORT,
 			},
 			context: async ({ req, res }) => {
+				const token = req.headers.authorization || '';
+
 				return {
+					currentUser: verifyUser(token),
 					db,
 					users,
 					todos,

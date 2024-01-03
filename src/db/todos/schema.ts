@@ -11,8 +11,8 @@ import { sql } from 'drizzle-orm';
 export const todos = pgTable('todos', {
 	id: varchar('todo_id', { length: 25 }).primaryKey(),
 	userId: varchar('user_id', { length: 25 })
-		.notNull()
-		.references(() => users.id),
+		.references(() => users.id, { onDelete: 'cascade' })
+		.notNull(),
 	title: text('title').notNull(),
 	description: text('description'),
 	isChecked: boolean('is_checked').notNull().default(false),

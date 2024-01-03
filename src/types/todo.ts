@@ -181,7 +181,7 @@ builder.mutationField('deleteTodo', (t) =>
  * 2 - Retornar todas as todos do usuario
  */
 
-builder.objectType('Todo', {
+export const Todo = builder.objectType('Todo', {
 	description: 'Representa uma tarefa a ser realizada',
 	fields: (t) => ({
 		id: t.exposeID('id', { description: `Identificador único da tarefa` }),
