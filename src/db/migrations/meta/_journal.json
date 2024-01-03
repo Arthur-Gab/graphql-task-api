@@ -1,0 +1,13 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1704150537164,
+      "tag": "0000_panoramic_colossus",
+      "breakpoints": true
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS todos;
+
+-- Create users table
+CREATE TABLE IF NOT EXISTS users (
+    user_id SERIAL PRIMARY KEY, -- Use cuid2 instead
+    username VARCHAR(50) UNIQUE NOT NULL,
+    login TEXT NOT NULL,
+    password TEXT NOT NULL,
+    avatar_url TEXT
+);
+
+-- Create todos table with a foreign key reference to users
+CREATE TABLE IF NOT EXISTS todos (
+    todo_id SERIAL PRIMARY KEY, -- Use cuid2 instead
+    user_id INT NOT NULL REFERENCES users(user_id),  -- Reference the user_id in the users table
+    title TEXT NOT NULL,
+    description TEXT,
+    isChecked BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP NOT NULL DEFAULT LOCALTIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT LOCALTIMESTAMP CHECK(updated_at >= created_at)
+);
+	
+
+

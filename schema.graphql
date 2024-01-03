@@ -1,0 +1,151 @@
+"""Data em formato ISO 8601 sem Time Zone"""
+scalar Date
+
+type Mutation {
+  """
+  Cria uma nova tarefa associada a um usuário. É necessário fornecer um ID de usuário válido e, no mínimo, um título para a tarefa. Outros campos opcionais incluem a descrição da tarefa e se ela está completa ou não.
+  """
+  createTodo(input: MutationCreateTodoInput!): Todo!
+
+  """
+  Cria um novo usuário no sistema. É necessário fornecer informações como login, senha e nome de usuário (username), o qual deve ser único.
+  """
+  createUser(input: MutationCreateUserInput!): User!
+
+  """
+  Remove uma tarefa do sistema. É necessário fornecer um ID de tarefa válido.
+  """
+  deleteTodo(input: MutationDeleteTodoInput!): Boolean!
+
+  """
+  Remove um usuário do sistema. É necessário fornecer um ID de usuário válido.
+  """
+  deleteUser(input: MutationDeleteUserInput!): Boolean!
+
+  """
+  Alterar o título, a descrição e o estado (completada ou não) de uma tarefa no sistema. É necessário fornecer um ID de tarefa válido.
+  """
+  updateTodo(input: MutationUpdateTodoInput!): Todo!
+
+  """
+  Altera o nome de usuário (username) de um usuário. É necessário fornecer um ID de usuário válido e um novo nome de usuário que não tenha sido registrado por outro usuário.
+  """
+  updateUsername(input: MutationUpdateUsernameInput!): User!
+}
+
+input MutationCreateTodoInput {
+  """Descrição detalhada da tarefa"""
+  description: String
+
+  """Indica se a tarefa está concluída ou não"""
+  isChecked: Boolean = false
+
+  """Título da nova tarefa"""
+  title: String!
+
+  """ID do usuário associado à tarefa"""
+  userId: ID!
+}
+
+input MutationCreateUserInput {
+  """Nome de login do novo usuário"""
+  login: String!
+
+  """Senha do novo usuário"""
+  password: String!
+
+  """Nome de usuário único para o novo usuário"""
+  username: String!
+}
+
+input MutationDeleteTodoInput {
+  """ID da tarefa a ser deletada."""
+  todoId: ID!
+}
+
+input MutationDeleteUserInput {
+  """ID único do usuário"""
+  userId: ID!
+}
+
+input MutationUpdateTodoInput {
+  """Nova descrição da tarefa"""
+  description: String
+
+  """Novo estado da tarefa concluída ou não"""
+  isChecked: Boolean
+
+  """Novo título da tarefa"""
+  title: String
+
+  """ID da tarefa a ser modificada"""
+  todoId: ID!
+}
+
+input MutationUpdateUsernameInput {
+  """ID único do usuário"""
+  userId: ID!
+
+  """Novo nome de usuário escolhido pelo usuário"""
+  username: String!
+}
+
+type Query {
+  """Obter usuário por ID no banco de dados"""
+  user(input: QueryUserInput!): User!
+
+  """Lista de Usuários Registrados no Banco de Dados"""
+  users: [User]!
+}
+
+input QueryUserInput {
+  """ID único do usuário"""
+  userId: ID!
+}
+
+"""Representa uma tarefa a ser realizada"""
+type Todo {
+  """Data de criação da tarefa no formato ISO 8601"""
+  createdAt: Date!
+
+  """Descrição detalhada da tarefa"""
+  description: String
+
+  """Identificador único da tarefa"""
+  id: ID!
+
+  """Indica se a tarefa foi concluída ou não"""
+  isChecked: Boolean!
+
+  """Título da tarefa"""
+  title: String!
+
+  """
+  Data da última alteração na tarefa em formato ISO 8601. Pode ser igual à data de criação em algum momento.
+  """
+  updatedAt: Date!
+
+  """Identificador do usuário a quem essa tarefa pertence"""
+  userId: ID!
+}
+
+"""Representa um usuário no sistema"""
+type User {
+  """URL do avatar do usuário"""
+  avatarUrl: String
+
+  """Identificador único do usuário"""
+  id: ID!
+
+  """Nome de login do usuário"""
+  login: String!
+
+  """Senha do usuário"""
+  password: String!
+
+  """Lista de tarefas associadas a este usuário."""
+  todoList: [Todo]!
+
+  """Nome de usuário do usuário"""
+  username: String!
+}
