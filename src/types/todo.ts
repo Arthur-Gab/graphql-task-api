@@ -8,6 +8,9 @@ import { eq } from 'drizzle-orm';
 builder.mutationField('createTodo', (t) =>
 	t.fieldWithInput({
 		description: `Cria uma nova tarefa associada a um usuário. É necessário fornecer um ID de usuário válido e, no mínimo, um título para a tarefa. Outros campos opcionais incluem a descrição da tarefa e se ela está completa ou não.`,
+		authScopes: {
+			isUserLoggedIn: true,
+		},
 		input: {
 			userId: t.input.id({
 				required: true,
@@ -71,6 +74,9 @@ builder.mutationField('createTodo', (t) =>
 builder.mutationField('updateTodo', (t) =>
 	t.fieldWithInput({
 		description: `Alterar o título, a descrição e o estado (completada ou não) de uma tarefa no sistema. É necessário fornecer um ID de tarefa válido.`,
+		authScopes: {
+			isUserLoggedIn: true,
+		},
 		input: {
 			todoId: t.input.id({
 				required: true,
@@ -146,6 +152,9 @@ builder.mutationField('updateTodo', (t) =>
 builder.mutationField('deleteTodo', (t) =>
 	t.fieldWithInput({
 		description: `Remove uma tarefa do sistema. É necessário fornecer um ID de tarefa válido.`,
+		authScopes: {
+			isUserLoggedIn: true,
+		},
 		input: {
 			todoId: t.input.id({
 				required: true,

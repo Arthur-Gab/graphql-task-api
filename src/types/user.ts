@@ -33,6 +33,9 @@ builder.queryField('users', (t) =>
 builder.queryField('user', (t) =>
 	t.fieldWithInput({
 		description: `Obter usuário por ID no banco de dados`,
+		authScopes: {
+			isUserLoggedIn: true,
+		},
 		input: {
 			userId: t.input.id({
 				required: true,
@@ -143,6 +146,9 @@ builder.mutationField('createUser', (t) =>
 builder.mutationField('deleteUser', (t) =>
 	t.fieldWithInput({
 		description: `Remove um usuário do sistema. É necessário fornecer um ID de usuário válido.`,
+		authScopes: {
+			isUserLoggedIn: true,
+		},
 		input: {
 			userId: t.input.id({
 				required: true,
@@ -175,6 +181,9 @@ builder.mutationField('deleteUser', (t) =>
 builder.mutationField('updateUsername', (t) =>
 	t.fieldWithInput({
 		description: `Altera o nome de usuário (username) de um usuário. É necessário fornecer um ID de usuário válido e um novo nome de usuário que não tenha sido registrado por outro usuário.`,
+		authScopes: {
+			isUserLoggedIn: true,
+		},
 		input: {
 			userId: t.input.id({
 				required: true,
@@ -248,6 +257,9 @@ export const User = builder.objectType('User', {
 		}),
 		todoList: t.field({
 			description: 'Lista de tarefas associadas a este usuário.',
+			authScopes: {
+				isUserLoggedIn: true,
+			},
 			type: ['Todo'],
 			nullable: {
 				list: false,
@@ -261,6 +273,7 @@ export const User = builder.objectType('User', {
 
 				return userTodosList || [];
 			},
+			unauthorizedResolver: () => [],
 		}),
 	}),
 });
