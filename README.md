@@ -10,7 +10,7 @@ Explore uma API GraphQL construída com Bun, dedicada à criação e manipulaç�
 
 <h3  align="center">
 
-Work on Progress...
+MVP Doned
 
 </h3>
 
@@ -46,7 +46,9 @@ Work on Progress...
 
 -   [x] Deletar Usuário
 
--   [ ] Autenticação
+-   [x] Autenticação
+
+-   [x] Autorização
 
 -   [ ] Adicionar Imagem de Perfil ao Usuário
 
@@ -54,7 +56,9 @@ Work on Progress...
 
 Consulte a documentação da API GraphQL para obter detalhes sobre os tipos, consultas e mutações suportadas.
 
-[Visualizar Documentação](./schema.graphql)
+[Visualizar GraphQL Schema](./schema.graphql)
+[Visualizar ERD - Modelagem BD](./UML/ERD.png)
+[Visualizar Template do SQL](./UML/sql_template)
 
 <h2  id='pre-requisitos'>Pré-requisitos</h2>
 

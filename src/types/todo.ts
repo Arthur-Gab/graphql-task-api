@@ -130,7 +130,10 @@ builder.mutationField('updateTodo', (t) =>
 			// ALterar os dados de fato
 			const updatedTodo = await db
 				.update(todos)
-				.set({ ...valuesToUpdateWithoutPossibleNullValues })
+				.set({
+					...valuesToUpdateWithoutPossibleNullValues,
+					updatedAt: new Date(),
+				})
 				.where(eq(todos.id, todoId))
 				.returning();
 
