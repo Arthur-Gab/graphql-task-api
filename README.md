@@ -154,6 +154,8 @@ As seguintes ferramentas foram usadas na construção do projeto:
 
 -   [@pothos/plugin-with-input](https://pothos-graphql.dev/docs/plugins/with-input)
 
+-   [@pothos/plugin-scope-auth](https://pothos-graphql.dev/docs/plugins/scope-auth)
+
 -   [@paralleldrive/cuid2](https://www.npmjs.com/package/@paralleldrive/cuid2)
 
 -   [Drizzle ORM](https://orm.drizzle.team/docs/overview)
