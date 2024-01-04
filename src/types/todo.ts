@@ -162,7 +162,7 @@ builder.mutationField('deleteTodo', (t) =>
 			}),
 		},
 		type: 'Boolean',
-		resolve: async (_, { input }, { db, todos }): Promise<any> => {
+		resolve: async (_, { input }, { db, todos }): Promise<boolean> => {
 			const deletedTodo = await db
 				.delete(todos)
 				.where(eq(todos.id, input.todoId))

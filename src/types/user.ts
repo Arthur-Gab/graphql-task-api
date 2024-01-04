@@ -156,7 +156,7 @@ builder.mutationField('deleteUser', (t) =>
 			}),
 		},
 		type: 'Boolean',
-		resolve: async (_, { input }, { db, users }): Promise<any> => {
+		resolve: async (_, { input }, { db, users }): Promise<boolean> => {
 			const deletedUser = await db
 				.delete(users)
 				.where(eq(users.id, input.userId))
